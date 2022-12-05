@@ -1,0 +1,40 @@
+# OS specifics
+.DS_Store
+
+# Build output files
+.m2
+.gradle
+.externalNativeBuild
+/build
+/captures
+/out
+/target
+/test-output
+/bin
+/run/log
+/run/archive
+/node_modules
+/run/util/AutoUpdateProj/out
+*.apk
+*.class
+*.json
+*.dex
+*.war
+*.bak
+*.txt
+*.log
+*.dmg
+
+# customized build setting files
+gradle.properties
+local.properties
+
+# IDE stuff
+.classpath
+.project
+.idea/
+.settings/
+proguard/
+*.iml
+*.ipr
+*.iws

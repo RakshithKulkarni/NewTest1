@@ -1,10 +1,12 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 
 public class MobileTest {
 
@@ -22,12 +24,25 @@ public class MobileTest {
         capabilities.setCapability("platformVersion", "11");
         capabilities.setCapability("appPackage", "us.zoom.videomeetings");
         capabilities.setCapability("appActivity", "com.zipow.videobox.LauncherActivity");
-        capabilities.setCapability("udid", "4544305030423498");
+        capabilities.setCapability("udid", "RF8M41K9B8D");
         try {
             wd = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
             wd.findElementById("btnJoin").click();
-        } catch (
-                MalformedURLException e) {
+            Assert.assertFalse("Join button is enabled",wd.findElementById("btnJoin").isEnabled());
+            wd.findElementById("edtConfNumber").sendKeys(RandomStringUtils.randomNumeric(9));
+            Assert.assertTrue("Join button is disabled",wd.findElementById("btnJoin").isEnabled());
+            wd.hideKeyboard();
+            if(wd.findElementById("chkNoVideo").getAttribute("checked").equals("false")){
+                wd.findElementById("chkNoVideo").click();
+            }
+            wd.findElementById("btnJoin").click();
+            Thread.sleep(10000);
+            Assert.assertTrue("Invalid meeting Id message incorrect",wd.findElementById("txtMsg").getText().equals("Invalid meeting ID. Please check and try again."));
+            wd.runAppInBackground(Duration.ofMinutes(-1));
+            wd.activateApp("us.zoom.videomeetings");
+
+            wd.closeApp();
+        } catch (Exception | Error e) {
             throw new RuntimeException(e);
         }
 
